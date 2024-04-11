@@ -1,0 +1,75 @@
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<script>
+/*const request = indexedDB.open("lumise3");
+let db;
+
+request.onupgradeneeded = function() {
+  // The database did not previously exist, so create object stores and indexes.
+  const db = request.result;
+  const store = db.createObjectStore("designs");
+ // const titleIndex = store.createIndex("by_title", "title", {unique: true});
+ // const authorIndex = store.createIndex("by_author", "author");
+
+	$.ajax({
+		method: "GET",
+		url:"get_saved_designs.php",
+		success: function(data) {
+  // Populate with initial data.
+//			console.log(JSON.parse(data));
+			var designs = JSON.parse(data);
+			console.log(designs);
+store.put({title: "Quarry Memories", author: "Fred", isbn: 123456});			for (key in designs) {
+				console.log(designs[key]);
+				store.put(designs[key],key);
+			}
+		}
+	}).fail(function(a,b,c){
+		alert('Oh snap! Please try again');
+	});
+};
+
+request.onsuccess = function() {
+  db = request.result;
+};
+*/
+$(document).ready(function (){
+	console.log('heelo');
+	let idb = indexedDB.open('lumise', 8)
+	idb.onsuccess = () => {
+		let res = idb.result;
+		let tx = res.transaction(['designs','dumb'], 'readwrite')
+
+		let dumbstore = tx.objectStore('dumb');
+		let designstore = tx.objectStore('designs');
+		var localdumb = dumbstore.get('LMU0KZUG');
+		var mysqldumb = dumbstore.get('LMU0M469');
+
+		localdumb.onsuccess = function () {
+			console.log(localdumb.result);
+			//store2.put(test2.result,'LMTGY8K0');
+			mysqldumb.onsuccess = function () {
+				dumbstore.put(localdumb.result,'LMU0M469');
+				console.log(mysqldumb.result);
+			}
+		}
+	}
+
+/*$.ajax({
+	method: "POST",
+	url:"savedesigns.php",
+	data:{
+		design_id:'1',
+		design:'2',
+		product_id:'3'
+	},
+	success: function(data) {
+		console.log(data);
+	}
+}).done(function( msg ) {
+	console.log(msg);
+}).fail(function(a,b,c){
+	alert('failed');
+	console.log(a,b,c);
+});*/
+});
+</script>
